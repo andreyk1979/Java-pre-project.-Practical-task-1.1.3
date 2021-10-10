@@ -13,7 +13,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() {
         try (Connection connection = Util.getConnection(); Statement statement = connection.createStatement()) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS userdb.users (id MEDIUMINT not NULL AUTO_INCREMENT, name VARCHAR(50) not NULL,lastname VARCHAR (50) not NULL,age int not NULL,PRIMARY KEY (id))");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS userdb.user (id MEDIUMINT not NULL AUTO_INCREMENT, name VARCHAR(50) not NULL,lastname VARCHAR (50) not NULL,age int not NULL,PRIMARY KEY (id))");
             System.out.println("Таблица создана");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -22,7 +22,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try (Connection connection = Util.getConnection(); Statement statement = connection.createStatement()) {
-            statement.executeUpdate("DROP TABLE IF EXISTS userdb.users");
+            statement.executeUpdate("DROP TABLE IF EXISTS userdb.user");
             System.out.println("Таблица удалена");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -32,7 +32,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
 
         PreparedStatement preparedStatement;
-        String sql = "INSERT INTO userdb.users (name, lastname, age) VALUES (? ,?, ?)";
+        String sql = "INSERT INTO userdb.user (name, lastname, age) VALUES (? ,?, ?)";
         try (Connection connection = Util.getConnection()) {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name);
@@ -47,7 +47,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
         PreparedStatement preparedStatement;
-        String sql = "DELETE  FROM userdb.users WHERE id=(?)";
+        String sql = "DELETE  FROM userdb.user WHERE id=(?)";
         try (Connection connection = Util.getConnection()) {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
@@ -60,7 +60,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM userdb.users";
+        String sql = "SELECT * FROM userdb.user";
         try (Connection connection = Util.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 long id = resultSet.getLong(1);
@@ -83,7 +83,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         try (Connection connection = Util.getConnection(); Statement statement = connection.createStatement()) {
-            statement.executeUpdate("TRUNCATE userdb.users");
+            statement.executeUpdate("TRUNCATE userdb.user");
             System.out.println("Таблица очищена");
         } catch (SQLException e) {
             e.printStackTrace();
